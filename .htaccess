@@ -1,0 +1,46 @@
+## Flag for GoDaddy
+Options +MultiViews
+
+RewriteBase /
+
+## Remove extensions
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+## Redirect from extensions to non-extensions
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
+RewriteRule ^ /%1 [R=301,NE,L]
+
+## Server Only
+
+## Redirect from www - non-www
+## RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+## RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+## Redirect from non-www - www
+## RewriteCond %{HTTP_HOST} ^yourdomain\.com$ [NC]
+## RewriteRule ^(.*)$ http://www.yourdomain.com/$1 [L, R=301]
+
+## SSL Redirect
+## RewriteEngine On
+## RewriteCond %{HTTPS} !=On
+## RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+
+## Create Error Pages
+ErrorDocument 404 /errors/404.html
+ErrorDocument 403 /errors/403.html
+ErrorDocument 500 /errors/500.html
+
+## Redirect non-existing pages to index.php
+Options +SymLinksIfOwnerMatch
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+
+## Redirect to a URL on the same domain or host
+Redirect 301 "/test1" "/test2"
+
+## Redirect to a different domain
+Redirect 301 "/service" "http://example.com"
